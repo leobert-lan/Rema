@@ -1,6 +1,30 @@
 plugins {
-    id 'java-library'
-    id 'kotlin'
+//    id 'java-library'
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+
+//apply plugin: 'org.jetbrains.dokka'
+apply from: "$rootDir/dependencies.gradle"
+
+android {
+    compileSdkVersion versions.compileSdk
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode versions.versionCode
+        versionName versions.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+    buildFeatures {
+        buildConfig false
+    }
 }
 
 java {
@@ -9,5 +33,9 @@ java {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+    implementation "androidx.appcompat:appcompat:$versions.androidxAppcompat"
+
+    testImplementation "junit:junit:$versions.junit"
 }
