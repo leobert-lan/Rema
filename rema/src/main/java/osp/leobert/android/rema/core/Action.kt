@@ -16,4 +16,10 @@ abstract class Action<Model, Result> {
     override fun hashCode(): Int {
         return javaClass.hashCode()
     }
+
+    override fun toString(): String {
+        return javaClass.name
+    }
+
+
 }

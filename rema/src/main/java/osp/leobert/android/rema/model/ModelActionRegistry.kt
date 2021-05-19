@@ -5,6 +5,7 @@ package osp.leobert.android.rema.model
 import osp.leobert.android.rema.Rema
 import osp.leobert.android.rema.core.Action
 import osp.leobert.android.rema.core.ActionHandler
+import osp.leobert.android.rema.core.RemaThrows
 import osp.leobert.android.rema.factory.ModelActionHandlerFactory
 import osp.leobert.android.rema.takeIfInstance
 
@@ -22,6 +23,11 @@ class ModelActionRegistry(val rema: Rema) {
 
         fun <M, R> handles(modelClass: Class<M>, action: Action<M, R>): Boolean =
             this.modelClass.isAssignableFrom(modelClass) && this.action == action
+
+        override fun toString(): String {
+            return "Entry(modelClass=$modelClass,\n action=$action,\n actionHandlerFactory=$actionHandlerFactory)"
+        }
+
 
     }
 
@@ -44,18 +50,26 @@ class ModelActionRegistry(val rema: Rema) {
         resultClass: Class<Result>,
         action: Action<Model, Result>
     ): ActionHandler<Model, Result>? {
-        // FIXME: 2021/5/19 should try catch
-//        1. missing register
-//        2. error register
         return entries.find {
             it.handles(modelClass = modelClass, action = action)
-        }?.takeIfInstance<Entry<Model, Result>>()?.run {
-            this.actionHandlerFactory.create(
-                modelClass = modelClass,
-                resultClass = resultClass,
-                action = action,
-                callback = ActionHandler.ComposeCallback()
-            )
+        }.apply {
+            //        1. missing register
+            if (this == null)
+                throw RemaThrows.missingRegisterModelAction(modelClass, action)
+        }?.run {
+            takeIfInstance<Entry<Model, Result>>().apply {
+                //        2. error register
+                if (this == null)
+                    throw RemaThrows.errorRegisterModelAction(this@run.toString())
+            }?.run {
+                this.actionHandlerFactory.create(
+                    modelClass = modelClass,
+                    resultClass = resultClass,
+                    action = action,
+                    callback = ActionHandler.ComposeCallback()
+                )
+
+            }
         }
     }
 }
