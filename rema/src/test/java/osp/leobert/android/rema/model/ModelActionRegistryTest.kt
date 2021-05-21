@@ -5,6 +5,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import osp.leobert.android.rema.Rema
+import osp.leobert.android.rema.RemaTest.*
 import osp.leobert.android.rema.core.Action
 import osp.leobert.android.rema.core.ActionHandler
 import osp.leobert.android.rema.core.RemaThrows
@@ -21,29 +22,6 @@ class ModelActionRegistryTest {
 
     var target: ModelActionRegistry = ModelActionRegistry(Rema())
 
-    open class M {
-
-        class LoadAction(callback: Callback<M, R>) : ModelActionHandler<M, R>(
-            callback
-        ) {
-            override fun cancelAction() {
-            }
-
-            override fun handle(model: M, request: Request<M, R>) {
-            }
-
-        }
-    }
-
-    class M1 : M()
-
-    open class R
-
-    class R1 : R()
-
-    object ActionMR : Action<M, R>()
-
-    object ActionM1R : Action<M1, R>()
 
     @Before
     fun start() {
