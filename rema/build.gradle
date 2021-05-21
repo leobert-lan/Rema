@@ -38,4 +38,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$versions.androidxAppcompat"
 
     testImplementation "junit:junit:$versions.junit"
+    testImplementation "org.robolectric:robolectric:4.5.1"
+    testImplementation 'com.google.guava:guava-testlib:18.0'
+//    testImplementation "com.google.truth:truth:${TRUTH_VERSION}"
 }

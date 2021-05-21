@@ -1,5 +1,6 @@
 package osp.leobert.android.rema.model
 
+import com.google.common.testing.EqualsTester
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -19,15 +20,26 @@ class ModelActionKeyTest {
 
     @Before
     fun setUp() {
-        keyM1 = ModelActionKey(RemaTest.M1(), RemaTest.ActionM1R)
-        keyM1_2 = ModelActionKey(RemaTest.M1(), RemaTest.ActionM1R)
-
-
+        keyM1 = ModelActionKey(RemaTest.M1().apply { this.str = "str" }, RemaTest.ActionM1R)
+        keyM1_2 = ModelActionKey(RemaTest.M1().apply { this.str = "str" }, RemaTest.ActionM1R)
     }
 
     @Test
     fun testEquals() {
-        assertEquals(keyM1, keyM1_2)
+//        assertEquals(keyM1, keyM1_2)
+
+        EqualsTester().addEqualityGroup(
+            keyM1,
+            keyM1,//幂等性
+            keyM1_2
+        ).addEqualityGroup(
+            ModelActionKey(RemaTest.M1().apply { this.str = "str2" }, RemaTest.ActionM1R)
+        ).addEqualityGroup(
+            ModelActionKey(RemaTest.M1(), RemaTest.ActionM1R)
+        ).addEqualityGroup(
+            ModelActionKey(RemaTest.M(), RemaTest.ActionMR),
+            ModelActionKey(RemaTest.M(), RemaTest.ActionMR)
+        ).testEquals()
     }
 
     @Test

@@ -23,9 +23,7 @@ class RemaTest {
             }
 
         }
-    }
 
-    class M1 : M() {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
@@ -35,6 +33,31 @@ class RemaTest {
         override fun hashCode(): Int {
             return javaClass.hashCode()
         }
+
+
+    }
+
+    class M1 : M() {
+
+        var str:String? = null
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+            if (!super.equals(other)) return false
+
+            other as M1
+
+            if (str != other.str) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = super.hashCode()
+            result = 31 * result + (str?.hashCode() ?: 0)
+            return result
+        }
+
     }
 
     open class R
